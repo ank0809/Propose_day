@@ -119,26 +119,6 @@ canvas { position: fixed; top: 0; left: 0; pointer-events: none; }
   from { transform: translateY(0) rotate(-45deg); opacity: 1; }
   to { transform: translateY(-500px) rotate(-45deg); opacity: 0; }
 }
-
-@keyframes shake {
-  0% { transform: translate(0, 0) rotate(0); }
-  25% { transform: translate(-5px, 0) rotate(-5deg); }
-  50% { transform: translate(5px, 0) rotate(5deg); }
-  75% { transform: translate(-5px, 0) rotate(-5deg); }
-  100% { transform: translate(0, 0) rotate(0); }
-}
-
-.emoji {
-  position: absolute;
-  font-size: 24px;
-  pointer-events: none;
-  animation: floatEmoji 1.5s ease-out forwards;
-}
-
-@keyframes floatEmoji {
-  0% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(-50px); }
-}
 </style>
 </head>
 <body>
@@ -172,7 +152,25 @@ const typedText = document.getElementById("typedText");
 const bgMusic = document.getElementById("bgMusic");
 const muteBtn = document.getElementById("muteBtn");
 
-let noCount = 0;
+// Messages for No button clicks
+const noMessages = [
+  "Are you sure? 🥺",
+  "Think again 💭",
+  "Don’t break my heart 💔",
+  "This is your last chance 😐",
+  "I’ll be sad 😞",
+  "Really really sure? 😶",
+  "Okay but… why 😢",
+  "You still have time 😌",
+  "Think again 💭",
+  "That click hurt a little 💔",
+  "Please reconsider 😞",
+  "I’ll wait 😐",
+  "Still no? 😶",
+  "Fine… only YES remains 💖"
+];
+
+let clickCount = 0;
 const message = 
 `"I love you so, so much ❤️
 
@@ -202,43 +200,15 @@ yesBtn.onclick = () => {
   noBtn.style.display = "none";
 };
 
-// Fixed No button logic
-noBtn.onmouseover = () => {
-  if (noCount < 6) {
-    // Calculate random position inside viewport
-    const btnWidth = noBtn.offsetWidth;
-    const btnHeight = noBtn.offsetHeight;
-    const maxX = window.innerWidth - btnWidth - 20;
-    const maxY = window.innerHeight - btnHeight - 20;
-
-    const newX = Math.random() * maxX;
-    const newY = Math.random() * maxY;
-
-    noBtn.style.position = "absolute";
-    noBtn.style.left = newX + "px";
-    noBtn.style.top = newY + "px";
-
-    // Shake effect
-    noBtn.style.animation = "shake 0.5s";
-    setTimeout(() => noBtn.style.animation = "", 500);
-
-    // Emoji pop
-    const emojis = ["💖","✨","💕","😍"];
-    const emojiEl = document.createElement("div");
-    emojiEl.className = "emoji";
-    emojiEl.style.left = (newX + 10 + Math.random()*30) + "px";
-    emojiEl.style.top = (newY - 10) + "px";
-    emojiEl.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    document.body.appendChild(emojiEl);
-    setTimeout(()=>emojiEl.remove(),1500);
-
-    noCount++;
+// No button click logic
+noBtn.onclick = () => {
+  if (clickCount < noMessages.length - 1) {
+    noBtn.textContent = noMessages[clickCount];
+    clickCount++;
   } else {
-    // Transform No to Yes after 6 escapes
-    noBtn.textContent = "Yes 💕";
+    noBtn.textContent = "Yes ❤️";
     noBtn.style.background = "#ff2d95";
     noBtn.onclick = yesBtn.onclick;
-    noBtn.onmouseover = null;
   }
 };
 
