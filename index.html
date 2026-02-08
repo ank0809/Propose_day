@@ -202,34 +202,43 @@ yesBtn.onclick = () => {
   noBtn.style.display = "none";
 };
 
-// No button logic
+// Fixed No button logic
 noBtn.onmouseover = () => {
   if (noCount < 6) {
-    // Shake button
+    // Calculate random position inside viewport
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+    const maxX = window.innerWidth - btnWidth - 20;
+    const maxY = window.innerHeight - btnHeight - 20;
+
+    const newX = Math.random() * maxX;
+    const newY = Math.random() * maxY;
+
+    noBtn.style.position = "absolute";
+    noBtn.style.left = newX + "px";
+    noBtn.style.top = newY + "px";
+
+    // Shake effect
     noBtn.style.animation = "shake 0.5s";
     setTimeout(() => noBtn.style.animation = "", 500);
-
-    // Random position
-    noBtn.style.position = "absolute";
-    noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
-    noBtn.style.top = Math.random() * (window.innerHeight - 100) + "px";
 
     // Emoji pop
     const emojis = ["💖","✨","💕","😍"];
     const emojiEl = document.createElement("div");
     emojiEl.className = "emoji";
-    emojiEl.style.left = (noBtn.offsetLeft + 10 + Math.random()*30) + "px";
-    emojiEl.style.top = (noBtn.offsetTop - 10) + "px";
+    emojiEl.style.left = (newX + 10 + Math.random()*30) + "px";
+    emojiEl.style.top = (newY - 10) + "px";
     emojiEl.textContent = emojis[Math.floor(Math.random()*emojis.length)];
     document.body.appendChild(emojiEl);
     setTimeout(()=>emojiEl.remove(),1500);
 
     noCount++;
   } else {
-    // Transform No to Yes
+    // Transform No to Yes after 6 escapes
     noBtn.textContent = "Yes 💕";
     noBtn.style.background = "#ff2d95";
     noBtn.onclick = yesBtn.onclick;
+    noBtn.onmouseover = null;
   }
 };
 
