@@ -124,7 +124,7 @@
 <body>
 
   <!-- Background Music -->
-  <audio id="bgMusic" autoplay loop>
+  <audio id="bgMusic" loop>
     <source src="https://raw.githubusercontent.com/ank0809/Propose_day/dac937d3ee31190418e0a527900d435f2155069c/Mere%20Naam%20Tu%20Instrumental%20Ringtone%20Download%20Pagalworld%20(mp3cut.net).mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
@@ -162,6 +162,10 @@ at being happy.
 
 Will you always stay with me? 💍"`;
 
+    // Play music on first interaction (bypasses autoplay restriction)
+    document.body.addEventListener("click", () => {
+      bgMusic.play().catch(()=>{});
+    }, { once: true });
 
     yesBtn.onclick = () => {
       popup.style.display = "block";
